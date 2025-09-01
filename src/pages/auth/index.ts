@@ -1,0 +1,6 @@
+export { default as CreatePage } from './CreatePage'
+export { default as ForgotPassPage } from './ForgotPassPage'
+export { default as LoginPage } from './LoginPage'
+export { default as RegisterPage } from './RegisterPage'
+export { default as ResetPassPage } from './ResetPassPage'
+export { default as VerifyPage } from './VerifyPage'
