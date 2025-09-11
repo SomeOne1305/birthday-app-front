@@ -1,5 +1,4 @@
 import Navbar from '@/components/navbar'
-import ProgressBar from '@/components/progress-bar'
 import { Toaster } from '@/components/ui/sonner'
 import { UserService } from '@/services/user.service'
 import { useAuthStore } from '@/stores/auth.store'
@@ -38,7 +37,6 @@ const MainLayout = () => {
 	return (
 		<div className='w-full min-h-screen h-screen'>
 			<Toaster richColors={true} closeButton={true} />
-			<ProgressBar />
 			<Navbar />
 			<Outlet />
 		</div>
