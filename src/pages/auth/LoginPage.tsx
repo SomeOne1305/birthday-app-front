@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import axios from 'axios'
 import { Loader2, Lock, Mail, PartyPopper } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router'
+import { Link } from 'react-router'
 
 // shadcn/ui
 import { Button } from '@/components/ui/button'
@@ -22,9 +21,9 @@ import { Label } from '@/components/ui/label'
 
 // schema
 import { loginSchema, type LoginForm } from '@/schemas/auth.schema'
+import { AuthService } from '@/services'
 
 export default function LoginPage() {
-	const navigate = useNavigate()
 	const {
 		register,
 		formState: { errors },
@@ -36,11 +35,16 @@ export default function LoginPage() {
 	const [error, setError] = useState<string | null>(null)
 
 	const mutation = useMutation({
-		mutationFn: async (payload: { email: string; password: string }) => {
-			return axios.post('/api/auth/login', payload)
+		mutationFn: async (payload: LoginForm) => {
+			return AuthService.login(payload)
 		},
-		onSuccess: () => {
-			navigate('/dashboard') // ✅ redirect after login
+		onSuccess: data => {
+			const access_token = data.data?.data?.access_token
+
+			if (access_token) {
+				localStorage.setItem('access_token', access_token)
+			}
+			window.location.assign('/') // ✅ redirect after login
 		},
 		onError: (err: any) => {
 			setError(err?.response?.data?.message || 'Invalid email or password.')

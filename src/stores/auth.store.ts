@@ -1,24 +1,25 @@
-import {createStore} from 'zustand'
+// src/stores/auth.store.ts
+import type { UserType } from '@/types/user.type'
+import { create } from 'zustand'
 
-
-export interface IUser {
-    _id?: string;
-    first_name?: string;
-    last_name?:string;
-    email?:string;
-    createdAt?:string;
-    updatedAt?:string
+interface AuthState {
+	user: UserType | null
+	isAuthenticated: boolean
+	setUser: (user: UserType | null) => void
+	setAuthenticated: (value: boolean) => void
+	logout: () => void
 }
 
-interface IAuthStore {
-    isAuthenticated:boolean
-    user: IUser
-    getUser: ()=> Promise<void>
-}
+export const useAuthStore = create<AuthState>(set => ({
+	user: null,
+	isAuthenticated: !!localStorage.getItem('access_token'),
 
-export const useAuthStore = createStore<IAuthStore>((set, getState)=>({
-    isAuthenticated: !!localStorage.getItem('access_token'),
-    user: {} as IUser,
-    getUser: async ()=> await new Promise((resolve, reject)=>{resolve()})
+	setUser: user => set({ user }),
+	setAuthenticated: value => set({ isAuthenticated: value }),
+
+	logout: () =>
+		set({
+			user: null,
+			isAuthenticated: false,
+		}),
 }))
-

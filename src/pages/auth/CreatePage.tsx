@@ -39,6 +39,8 @@ export default function CreatePage() {
 			return await AuthService.create({ ...others, token: token! })
 		},
 		onSuccess: () => {
+			console.log(mutation.data)
+
 			navigate('/login')
 		},
 		onError: (err: any) => {

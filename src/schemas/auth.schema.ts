@@ -27,7 +27,7 @@ export const resetPasswordSchema = z
 		confirmPassword: z.string().min(8, 'Confirm your password'),
 	})
 	.refine(data => data.password === data.confirmPassword, {
-		message: "Passwords don't match",
+		message: 'Passwords do not match',
 		path: ['confirmPassword'],
 	})
 
