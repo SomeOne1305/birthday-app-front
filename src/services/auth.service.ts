@@ -50,6 +50,9 @@ const AuthService = {
 			data
 		)
 	},
+	logout: async () => {
+		return await api.delete<IResponse>(API_URLS.logout)
+	},
 }
 
 export default AuthService

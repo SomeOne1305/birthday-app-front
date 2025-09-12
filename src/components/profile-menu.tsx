@@ -8,9 +8,12 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { AuthService } from '@/services'
 import { useAuthStore } from '@/stores/auth.store'
-import { Cake, Gift, LogOut, Settings, User } from 'lucide-react'
+import { useMutation } from '@tanstack/react-query'
+import { CheckCheckIcon, LogOut, Settings, User, XIcon } from 'lucide-react'
 import { useNavigate } from 'react-router'
+import { toast } from 'sonner'
 
 export function ProfileMenu() {
 	const { user } = useAuthStore()
@@ -20,9 +23,24 @@ export function ProfileMenu() {
 	}`.toUpperCase()
 	const handleSettings = () => navigate('/settings/')
 
-	const handleLogout = () => {
-		console.log('Logout user')
-	}
+	const { mutate } = useMutation({
+		mutationKey: ['logout'],
+		mutationFn: () => AuthService.logout(),
+		onSuccess: () => {
+			toast('Logged out', {
+				icon: <CheckCheckIcon className='w-4 h-4 text-green-500' />,
+				description: 'Logged out successfully !',
+			})
+			window.location.assign('/')
+		},
+		onError: err => {
+			toast(String(err), {
+				icon: <XIcon className='w-4 h-4 text-red-500' />,
+				description: 'Error occurred while logging out !',
+			})
+		},
+	})
+	const handleLogout = () => mutate
 
 	return (
 		<DropdownMenu>
@@ -65,19 +83,19 @@ export function ProfileMenu() {
 					</div>
 				</DropdownMenuLabel>
 
-				<DropdownMenuSeparator />
+				{/* <DropdownMenuSeparator /> */}
 
 				{/* Fun Birthday Feature */}
-				<DropdownMenuItem className='cursor-pointer hover:bg-[#3F72AF]/10 transition'>
+				{/* <DropdownMenuItem className='cursor-pointer hover:bg-[#3F72AF]/10 transition'>
 					<Cake className='mr-2 h-4 w-4 text-[#3F72AF]' />
 					<span>Upcoming Birthdays</span>
 				</DropdownMenuItem>
 				<DropdownMenuItem className='cursor-pointer hover:bg-[#3F72AF]/10 transition'>
 					<Gift className='mr-2 h-4 w-4 text-[#3F72AF]' />
 					<span>Send a Gift</span>
-				</DropdownMenuItem>
+				</DropdownMenuItem> */}
 
-				<DropdownMenuSeparator />
+				<DropdownMenuSeparator className='mt-3' />
 
 				<DropdownMenuItem
 					onClick={handleSettings}
